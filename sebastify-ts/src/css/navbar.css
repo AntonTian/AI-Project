@@ -1,0 +1,26 @@
+nav {
+    height: 80px;
+    background: #02009C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0rem calc((100vw - 1300px) / 2);
+  }
+  
+  .logo {
+    color: #FFFFFF;
+    font-size: 1.9rem;
+    padding: 0 2rem;
+  }
+  
+  .nav-items a {
+    text-decoration: none;
+    color: #FFFFFF;
+    padding: 0 1.5rem;
+    font-size: 1.3rem;
+  }
+  
+  .nav-items a:hover {
+    color: #DC03B7;
+  }
+  
