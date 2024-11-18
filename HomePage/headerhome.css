@@ -1,0 +1,186 @@
+.varela-round-regular {
+    font-family: "Varela Round", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    box-sizing: border-box;
+    width: 105%;
+    height: 200px;
+    padding: 40px 30px 0 30px;
+    font-size: 30px;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.logoposition {
+    margin-left: 50px;
+    height: 150px;
+    width: auto;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+    justify-content: space-between; 
+}
+
+h1 {
+    margin-left: 30px;
+    color: #0034bb;
+    font-family: "Varela Round", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.shortcut-header {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.homepage, .whatsapp, .email {
+    margin-left: 20px; 
+}
+
+.homepage a, .whatsapp a, .email a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.icon {
+    height: 100px;
+    width: 100px; 
+    border-radius: 50%;
+    transition: box-shadow 0.3s ease;
+}
+
+.homepage:hover .icon{
+    box-shadow: 0 4px 8px #0034bb; 
+}
+.whatsapp:hover .icon {
+    box-shadow: 0 4px 8px #42f5d7;  
+}
+.email:hover .icon {
+    box-shadow: 0 4px 8px #ff96da; 
+}
+
+
+.logoposition {
+    height: 150px;
+    width: auto;
+}
+
+.infoHeader {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+    justify-content: space-between; 
+}
+
+h1 {
+    margin-left: 30px;
+    color: #0034bb;
+    font-family: "Joti One", serif;
+    font-style: normal;
+    font-size: 60px;
+}
+
+.shortcut-header {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.shortcut-header p {
+    margin-left: 30px;
+    color: #638cf6;
+    font-family: "Joti One", serif;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.shortcut-header a {
+    text-decoration: none;
+    margin-left: 30px;
+    color: #0034bb;
+    font-family: "Joti One", serif;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.homepage, .whatsapp, .email {
+    margin-left: 20px; 
+}
+
+.homepage a, .whatsapp a, .email a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.icon {
+    height: 100px;
+    width: 100px; 
+    border-radius: 50%;
+    transition: box-shadow 0.3s ease;
+}
+
+.search {
+    --padding: 14px;
+    margin-left: 20px;
+    margin-right: 10px;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    border-radius: 30px;
+    background-color: transparent;
+    transition: box-shadow 0.25s;
+    border-color: #0034bb;
+}
+
+
+.seatch:focus-within {
+    background: #638cf6;
+
+}
+.search-input {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #0034bb;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    flex: 1;
+}
+
+.search-input::placeholder,.search-icon {
+    color: #0034bb;
+
+}
+
+#searchButton {
+    padding-top: 10px;
+    border-radius: 50%;
+    background-color: #0079d0;
+    color: green;
+    cursor: pointer;
+}
+
+
+.login-register a:hover {
+    text-decoration: underline;
+}
+
+
+
+
