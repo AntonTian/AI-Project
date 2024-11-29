@@ -25,7 +25,7 @@ const Login: React.FC = () => {
                         <form>
                             <input type="email" placeholder="Email" required />
                             <input type="password" placeholder="Password" required />
-                            <a href="/">Forgot Password?</a>
+                            <Link to='/'><a href="">Forgot Password</a></Link>
                             <button type="submit">SIGN IN</button>
                         </form>
                         <p>
