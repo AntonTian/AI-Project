@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/Register.css';
 import Navbar from './Navbar';
+import { Link } from 'react-router-dom';
 
 const RegisterPage: React.FC = () => {
     return (
@@ -27,7 +28,7 @@ const RegisterPage: React.FC = () => {
                             <button type="submit">SIGN UP</button>
                         </form>
                         <p>
-                            Already have an account? <a href="/login">Login</a>
+                            Already have an account? <Link to='/Login'><a>Login</a></Link> 
                         </p>
                     </div>
                 </div>
