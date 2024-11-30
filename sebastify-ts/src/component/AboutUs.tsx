@@ -8,50 +8,80 @@ import image4 from "../assets/music4.jpg";
 const AboutUs: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
-  const containerStyle = {
+  const containerStyle: React.CSSProperties = {
     display: "flex",
     justifyContent: "space-evenly",
     alignItems: "center",
     height: "100vh",
-    backgroundColor: "#1E1E2F", // Dark background
+    backgroundColor: "#1E1E2F",
     color: "white",
     flexDirection: "column" as const,
   };
 
-  const headerStyle = {
+  const headerStyle: React.CSSProperties = {
     fontSize: "3rem",
     marginBottom: "2rem",
   };
 
-  const cardContainerStyle = {
+  const cardContainerStyle: React.CSSProperties = {
     display: "flex",
     gap: "1rem",
   };
 
-  const cardStyle = (bgImage: string, isExpanded: boolean) => ({
+  const cardStyle = (
+    bgImage: string,
+    isExpanded: boolean
+  ): React.CSSProperties => ({
+    position: "relative",
+    width: isExpanded ? "300px" : "150px",
+    height: isExpanded ? "350px" : "250px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    overflow: "hidden",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  });
+
+  const imageStyle = (
+    bgImage: string,
+    isExpanded: boolean
+  ): React.CSSProperties => ({
     backgroundImage: `url(${bgImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     filter: isExpanded ? "brightness(0.6)" : "brightness(1)",
-    width: isExpanded ? "300px" : "150px",
-    height: isExpanded ? "350px" : "250px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: isExpanded ? "1.2rem" : "1rem",
-    fontWeight: "bold",
-    color: "white",
-    textShadow: `-1px -1px 2px black,
-    1px -1px 2px black,  
-    -1px 1px 2px black,  
-    1px 1px 2px black 
-  `,
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    transition: "all 0.3s ease",
-    cursor: "pointer",
-    textAlign: "center" as const,
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 0,
   });
+
+  const overlayStyle = (isExpanded: boolean): React.CSSProperties => ({
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: isExpanded ? "rgba(0, 0, 0, 0.4)" : "transparent",
+    zIndex: 1,
+    transition: "all 0.3s ease",
+  });
+
+  const textStyle: React.CSSProperties = {
+    position: "relative",
+    zIndex: 2,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "1.2rem",
+    textAlign: "center",
+    textShadow: `-1px -1px 2px black,
+      1px -1px 2px black,  
+      -1px 1px 2px black,  
+      1px 1px 2px black`,
+    padding: "1rem",
+  };
 
   const messages = [
     "A scripting language is sometimes referred to as a very high-level programming language if it operates at a high level of abstraction, or as a control language.",
@@ -75,9 +105,13 @@ const AboutUs: React.FC = () => {
                 setExpandedCard(expandedCard === index ? null : index)
               }
             >
-              {expandedCard === index
-                ? messages[index]
-                : `Container ${index + 1}`}
+              <div style={imageStyle(image, expandedCard === index)} />
+              <div style={overlayStyle(expandedCard === index)} />
+              <div style={textStyle}>
+                {expandedCard === index
+                  ? messages[index]
+                  : `Container ${index + 1}`}
+              </div>
             </div>
           ))}
         </div>

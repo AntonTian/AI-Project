@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Ensure you're using React Router
 import "../css/Sebastify.css";
 import Navbar from "./Navbar";
-import languages from "./languages.json";
 
 const Sebastify: React.FC = () => {
   const [age, setAge] = useState(37);
   const [gender, setGender] = useState("Anonymous");
-  const [feelings, setFeelings] = useState<{ [key: string]: number }>({
+  const [feelings, setFeelings] = useState({
     happy: 0,
     sad: 0,
     angry: 0,
@@ -103,34 +102,21 @@ const Sebastify: React.FC = () => {
 
         <label>How do you Feel?*</label>
         <div className="feelings-slider">
-          {Object.keys(feelings).map((key) => (
+          {["happy", "sad", "angry"].map((key) => (
             <div key={key} className="slider">
               <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
               <input
                 type="range"
                 min="0"
                 max="100"
-                value={feelings[key]}
+                value={feelings[key as keyof typeof feelings]}
                 onChange={(e) =>
                   handleSliderChange(key, parseInt(e.target.value, 10))
                 }
               />
-              <span>{feelings[key]}%</span>
+              <span>{feelings[key as keyof typeof feelings]}%</span>
             </div>
           ))}
-
-          <div className="add-emotion">
-            <label>Add New Emotion:</label>
-            <input
-              type="text"
-              value={newEmotion}
-              onChange={(e) => setNewEmotion(e.target.value)}
-              placeholder="Enter new emotion"
-            />
-            <button type="button" onClick={handleAddEmotion}>
-              Add
-            </button>
-          </div>
         </div>
 
         <label>What is your Fav Genre?</label>
@@ -167,8 +153,10 @@ const Sebastify: React.FC = () => {
         <select value={language} onChange={(e) => setLanguage(e.target.value)}>
           <option value="Indonesia">Indonesia</option>
           <option value="English">English</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Korean">Korean</option>
+          <option value="Japanese">Japanese</option>
           <option value="Spanish">Spanish</option>
-          {/* Add more languages as needed */}
         </select>
 
         <div className="additional-inputs">
