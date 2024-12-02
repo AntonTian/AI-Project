@@ -42,9 +42,8 @@ const Sebastify: React.FC = () => {
       setErrorMessage("Please explain your feelings.");
       return;
     }
-
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB8KJzgnZZQHUFyZm3HzDBZGlhYcxIBaag";
+    const apiKey = process.env.REACT_APP_API_KEY || "";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const payload = {
       contents: [
         {
