@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure you're using React Router
+import { useNavigate } from "react-router-dom";
 import "../css/Sebastify.css";
 import Navbar from "./Navbar";
+import { analyzeFeelings } from "./api";
 
 const Sebastify: React.FC = () => {
   const [age, setAge] = useState(37);
@@ -17,6 +18,7 @@ const Sebastify: React.FC = () => {
   const [artist, setArtist] = useState("");
   const [year, setYear] = useState("");
   const [explanation, setExplanation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSliderChange = (key: string, value: number) => {
@@ -31,39 +33,44 @@ const Sebastify: React.FC = () => {
     );
   };
 
-  const handleAddEmotion = () => {
-    if (newEmotion.trim() && !(newEmotion in feelings)) {
-      setFeelings({ ...feelings, [newEmotion]: 0 });
-      setNewEmotion("");
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
 
-    // Simulate generating song results based on formData
-    const songResults = [
-      {
-        title: "Kokoronashi",
-        artist: "Gumi",
-        year: 2015,
-        image: "https://example.com/kokoronashi.jpg",
-      },
-      {
-        title: "Pretender",
-        artist: "Official Hige Dandism",
-        year: 2019,
-        image: "https://example.com/pretender.jpg",
-      },
-      {
-        title: "Shinunoga E-Wa",
-        artist: "Fujii Kaze",
-        year: 2020,
-        image: "https://example.com/shinunoga-e-wa.jpg",
-      },
-    ];
+    if (!explanation.trim()) {
+      setErrorMessage("Please explain your feelings.");
+      return;
+    }
 
-    navigate("/Result", { state: { songs: songResults } });
+    try {
+      const analysisResult = await analyzeFeelings(explanation);
+
+      const songResults = [
+        {
+          title: "Kokoronashi",
+          artist: "Gumi",
+          year: 2015,
+          image: "https://example.com/kokoronashi.jpg",
+        },
+        {
+          title: "Pretender",
+          artist: "Official Hige Dandism",
+          year: 2019,
+          image: "https://example.com/pretender.jpg",
+        },
+        {
+          title: "Shinunoga E-Wa",
+          artist: "Fujii Kaze",
+          year: 2020,
+          image: "https://example.com/shinunoga-e-wa.jpg",
+        },
+      ];
+
+      console.log("Analysis Result:", analysisResult);
+      navigate("/Result", { state: { songs: songResults } });
+    } catch (error: any) {
+      setErrorMessage("Failed to analyze feelings. Please try again later.");
+    }
   };
 
   return (
