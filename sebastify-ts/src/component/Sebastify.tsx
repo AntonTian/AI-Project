@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Sebastify.css";
 import Navbar from "./Navbar";
 import { analyzeFeelings } from "./api";
+import axios from "axios";
 
 const Sebastify: React.FC = () => {
   const [age, setAge] = useState(37);
@@ -42,8 +43,26 @@ const Sebastify: React.FC = () => {
       return;
     }
 
+    const url =
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB8KJzgnZZQHUFyZm3HzDBZGlhYcxIBaag";
+    const payload = {
+      contents: [
+        {
+          parts: [{ text: "what do you know about hoshimachi suisei" }],
+        },
+      ],
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
     try {
-      const analysisResult = await analyzeFeelings(explanation);
+      const res = await axios.post(url, payload, config);
+      console.log("Response : ", res.data);
+      return res.data;
 
       const songResults = [
         {
@@ -66,7 +85,6 @@ const Sebastify: React.FC = () => {
         },
       ];
 
-      console.log("Analysis Result:", analysisResult);
       navigate("/Result", { state: { songs: songResults } });
     } catch (error: any) {
       setErrorMessage("Failed to analyze feelings. Please try again later.");
