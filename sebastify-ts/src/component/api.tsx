@@ -13,6 +13,7 @@ export const analyzeFeelings = async ({
   artist,
   year,
   explanation,
+  feels,
 }: {
   age: number;
   gender: string;
@@ -22,6 +23,7 @@ export const analyzeFeelings = async ({
   artist: string;
   year: string;
   explanation: string;
+  feels: string;
 }) => {
   try {
     const payload = {
@@ -29,10 +31,10 @@ export const analyzeFeelings = async ({
         {
           parts: [
             {
-              text: `Give some songs suggest with json data, based on user age ${age} old, gender : 
-            ${gender}, feel : ${feelings}, which genre favourite ${genre}, 
-            language : ${language}, which prefer artist : ${artist}, 
-            in year public songs ${year}, then this is the user feel now ${explanation}`,
+              text: `Aku adalah seorang ${gender} berumur ${age}, aku menyukai musik 
+              ${genre} dan saat ini aku sedang merasa ${feels},
+               bisakah kamu memberikan saya rekomendasi lagu dengan bahasa ${language} 
+               dari artist ${artist} yang rilis tahun ${year}`,
             },
           ],
         },
@@ -46,12 +48,10 @@ export const analyzeFeelings = async ({
     };
 
     const res = await axios.post(url, payload, config);
-    console.log(`Give some songs suggest with json data, based on user age ${age} old, gender : 
-            ${gender}, feel percetage => angry ${feelings.angry}% ,happy ${feelings.happy}% 
-            ,sad ${feelings.sad}%, 
-            which genre favourite ${genre}, 
-            language : ${language}, which prefer artist : ${artist}, 
-            in year public songs ${year}, then this is the user feel now ${explanation}`);
+    console.log(`Aku adalah seorang ${gender} berumur ${age}, aku menyukai musik 
+              ${genre} dan saat ini aku sedang merasa ${feels},
+               bisakah kamu memberikan saya rekomendasi lagu dengan bahasa ${language} 
+               dari artist ${artist} yang rilis tahun ${year}`);
     console.log("Response : ", res.data);
     return res.data.songs;
   } catch (error: any) {

@@ -13,6 +13,7 @@ const Sebastify: React.FC = () => {
     sad: 0,
     angry: 0,
   });
+  const [feels, setFeels] = useState<string>("");
   const [genre, setGenre] = useState<string[]>([]);
   const [language, setLanguage] = useState("Indonesia");
   const [artist, setArtist] = useState("");
@@ -22,7 +23,32 @@ const Sebastify: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSliderChange = (key: string, value: number) => {
-    setFeelings({ ...feelings, [key]: value });
+    const newFeelings = { ...feelings, [key]: value };
+    const total = newFeelings.happy + newFeelings.sad + newFeelings.angry;
+    if (total > 100) {
+      const excess = total - 100;
+      if (
+        newFeelings.happy >= newFeelings.sad &&
+        newFeelings.happy >= newFeelings.angry
+      ) {
+        newFeelings.happy -= excess;
+      } else if (
+        newFeelings.sad >= newFeelings.happy &&
+        newFeelings.sad >= newFeelings.angry
+      ) {
+        newFeelings.sad -= excess;
+      } else {
+        newFeelings.angry -= excess;
+      }
+
+      newFeelings.happy = Math.max(0, newFeelings.happy);
+      newFeelings.sad = Math.max(0, newFeelings.sad);
+      newFeelings.angry = Math.max(0, newFeelings.angry);
+    }
+    setFeelings(newFeelings);
+
+    const newFeels = determineFeel();
+    setFeels(newFeels);
   };
 
   const handleGenreChange = (selectedGenre: string) => {
@@ -35,6 +61,18 @@ const Sebastify: React.FC = () => {
 
   const getButtonClass = (buttonGender: string) => {
     return gender === buttonGender ? "active" : "";
+  };
+
+  const determineFeel = () => {
+    const { happy, sad, angry } = feelings;
+    if (happy > sad && happy > angry) {
+      return "happy";
+    } else if (sad > happy && sad > angry) {
+      return "sad";
+    } else if (angry > happy && angry > sad) {
+      return "angry";
+    }
+    return "neutral";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,6 +94,8 @@ const Sebastify: React.FC = () => {
     }
 
     try {
+      const feels = determineFeel();
+
       const songResults = await analyzeFeelings({
         age,
         gender,
@@ -65,6 +105,7 @@ const Sebastify: React.FC = () => {
         artist,
         year,
         explanation,
+        feels,
       });
 
       //just dummy
