@@ -13,7 +13,6 @@ const Sebastify: React.FC = () => {
     sad: 0,
     angry: 0,
   });
-  const [newEmotion, setNewEmotion] = useState("");
   const [genre, setGenre] = useState<string[]>([]);
   const [language, setLanguage] = useState("Indonesia");
   const [artist, setArtist] = useState("");
@@ -34,55 +33,61 @@ const Sebastify: React.FC = () => {
     );
   };
 
+  const getButtonClass = (buttonGender: string) => {
+    return gender === buttonGender ? "active" : "";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+    if (age <= 0) {
+      setErrorMessage("Age must be greater than 0.");
+      return;
+    }
+
+    if (genre.length === 0) {
+      setErrorMessage("Please select at least one genre.");
+      return;
+    }
 
     if (!explanation.trim()) {
       setErrorMessage("Please explain your feelings.");
       return;
     }
-    const apiKey = process.env.REACT_APP_API_KEY || "";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-    const payload = {
-      contents: [
-        {
-          parts: [{ text: "what do you know about hoshimachi suisei" }],
-        },
-      ],
-    };
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
     try {
-      const res = await axios.post(url, payload, config);
-      console.log("Response : ", res.data);
-      return res.data;
+      const songResults = await analyzeFeelings({
+        age,
+        gender,
+        feelings,
+        genre,
+        language,
+        artist,
+        year,
+        explanation,
+      });
 
-      const songResults = [
-        {
-          title: "Kokoronashi",
-          artist: "Gumi",
-          year: 2015,
-          image: "https://example.com/kokoronashi.jpg",
-        },
-        {
-          title: "Pretender",
-          artist: "Official Hige Dandism",
-          year: 2019,
-          image: "https://example.com/pretender.jpg",
-        },
-        {
-          title: "Shinunoga E-Wa",
-          artist: "Fujii Kaze",
-          year: 2020,
-          image: "https://example.com/shinunoga-e-wa.jpg",
-        },
-      ];
+      //just dummy
+      // const songResults = [
+      //   {
+      //     title: "Kokoronashi",
+      //     artist: "Gumi",
+      //     year: 2015,
+      //     image: "https://example.com/kokoronashi.jpg",
+      //   },
+      //   {
+      //     title: "Pretender",
+      //     artist: "Official Hige Dandism",
+      //     year: 2019,
+      //     image: "https://example.com/pretender.jpg",
+      //   },
+      //   {
+      //     title: "Shinunoga E-Wa",
+      //     artist: "Fujii Kaze",
+      //     year: 2020,
+      //     image: "https://example.com/shinunoga-e-wa.jpg",
+      //   },
+      // ];
 
       navigate("/Result", { state: { songs: songResults } });
     } catch (error: any) {
@@ -113,13 +118,28 @@ const Sebastify: React.FC = () => {
 
         <label>Your Gender?*</label>
         <div className="gender-input">
-          <button type="button" onClick={() => setGender("Female")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Female")}
+            className={getButtonClass("Female")}
+          >
             Female
           </button>
-          <button type="button" onClick={() => setGender("Anonymous")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Anonymous")}
+            className={getButtonClass("Anonymous")}
+          >
             Anonymous
           </button>
-          <button type="button" onClick={() => setGender("Male")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Male")}
+            className={getButtonClass("Male")}
+          >
             Male
           </button>
         </div>
