@@ -6,8 +6,8 @@ import { analyzeFeelings } from "./api";
 import axios from "axios";
 
 const Sebastify: React.FC = () => {
-  const [age, setAge] = useState(37);
-  const [gender, setGender] = useState("Anonymous");
+  const [age, setAge] = useState(25);
+  const [gender, setGender] = useState("Male");
   const [feelings, setFeelings] = useState({
     happy: 0,
     sad: 0,
@@ -15,7 +15,7 @@ const Sebastify: React.FC = () => {
   });
   const [feels, setFeels] = useState<string>("");
   const [genre, setGenre] = useState<string[]>([]);
-  const [language, setLanguage] = useState("Indonesia");
+  const [language, setLanguage] = useState("English");
   const [artist, setArtist] = useState("");
   const [year, setYear] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -83,13 +83,19 @@ const Sebastify: React.FC = () => {
       return;
     }
 
-    if (genre.length === 0) {
-      setErrorMessage("Please select at least one genre.");
+    if (!gender.trim()) {
+      setErrorMessage("Please select your gender.");
       return;
     }
 
-    if (!explanation.trim()) {
-      setErrorMessage("Please explain your feelings.");
+    const totalFeelings = feelings.happy + feelings.sad + feelings.angry;
+    if (totalFeelings !== 100) {
+      setErrorMessage("Feelings must add up to 100%.");
+      return;
+    }
+
+    if (!language.trim()) {
+      setErrorMessage("Please select a language.");
       return;
     }
 
