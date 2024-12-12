@@ -1,8 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-const apiKey = process.env.REACT_APP_API_KEY || "";
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+const url = `https://wowiwowi.pythonanywhere.com/recommend_songs`;
 
 export const analyzeFeelings = async ({
   age,
@@ -26,21 +25,25 @@ export const analyzeFeelings = async ({
   feels: string;
 }) => {
   try {
-    const payload = {
-      contents: [
-        {
-          parts: [
-            {
-              text: `Aku adalah seorang ${gender} berumur ${age}, aku menyukai musik 
-              ${genre} dan saat ini aku sedang merasa ${feels},
-               bisakah kamu memberikan saya rekomendasi lagu dengan bahasa ${language} 
-               dari artist ${artist} yang rilis tahun ${year}`,
-            },
-          ],
-        },
-      ],
+    const payload: any = {
+      age: age,
+      gender: gender,
+      feelings: feels,
+      language: language,
+      description: explanation,
     };
 
+    if (genre.length > 0) {
+      payload["genre"] = genre;
+    }
+    if (artist.trim()) {
+      payload["artist"] = artist;
+    }
+    if (year.trim()) {
+      payload["year"] = year;
+    }
+
+    console.log(payload);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -48,10 +51,7 @@ export const analyzeFeelings = async ({
     };
 
     const res = await axios.post(url, payload, config);
-    console.log(`Aku adalah seorang ${gender} berumur ${age}, aku menyukai musik 
-              ${genre} dan saat ini aku sedang merasa ${feels},
-               bisakah kamu memberikan saya rekomendasi lagu dengan bahasa ${language} 
-               dari artist ${artist} yang rilis tahun ${year}`);
+    console.log("Payload : ", payload);
     console.log("Response : ", res.data);
     return res.data.songs;
   } catch (error: any) {
