@@ -12,7 +12,7 @@ interface Song {
 
 const Result: React.FC = () => {
   const location = useLocation();
-  const songs: Song[] = location.state?.songs || [];
+  const resultData = location.state?.data || [];
 
   return (
     <div className="result-page">
@@ -23,14 +23,19 @@ const Result: React.FC = () => {
         <h3>"Goodbye, I'm not the person in your destiny"</h3>
       </div>
 
-      <div className="songs-section">
-        {songs.map((song) => (
-          <div className="song-card" key={song.title}>
-            <img src={song.image} alt={song.title} />
-            <h3>{song.title}</h3>
+      <div className="songs-list">
+        {resultData.map((song: any, index: number) => (
+          <div key={song.spotify_id} className="song-item">
+            <h3>{song.name}</h3>
             <p>Song by {song.artist}</p>
-            <span>{song.year}</span>
-            <button className="play-button">▶</button>
+            <button
+              className="play-button"
+              onClick={() =>
+                window.open(`https://open.spotify.com/track/${song.spotify_id}`)
+              }
+            >
+              ▶
+            </button>
           </div>
         ))}
       </div>
