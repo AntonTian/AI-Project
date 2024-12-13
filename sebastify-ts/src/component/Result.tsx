@@ -4,15 +4,17 @@ import Navbar from "./Navbar";
 import { useLocation } from "react-router-dom";
 
 interface Song {
-  title: string;
   artist: string;
-  year: number;
-  image: string; // URL for the song's cover image
+  genre: string;
+  name: string;
+  position: number;
+  spotify_id: string;
 }
 
 const Result: React.FC = () => {
   const location = useLocation();
-  const resultData = location.state?.data || [];
+  const { state } = location;
+  const songs: Song[] = state?.songs || [];
 
   return (
     <div className="result-page">
@@ -24,14 +26,17 @@ const Result: React.FC = () => {
       </div>
 
       <div className="songs-list">
-        {resultData.map((song: any, index: number) => (
+        {songs.map((song) => (
           <div key={song.spotify_id} className="song-item">
             <h3>{song.name}</h3>
             <p>Song by {song.artist}</p>
             <button
               className="play-button"
               onClick={() =>
-                window.open(`https://open.spotify.com/track/${song.spotify_id}`)
+                window.open(
+                  `https://open.spotify.com/track/${song.spotify_id}`,
+                  "_blank"
+                )
               }
             >
               ▶
