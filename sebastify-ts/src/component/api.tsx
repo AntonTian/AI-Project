@@ -53,7 +53,8 @@ export const analyzeFeelings = async ({
     const res = await axios.post(url, payload, config);
     console.log("Payload : ", payload);
     console.log("Response : ", res.data);
-    return res.data.songs;
+    console.log("Response (Recommendation Only): ", res.data.recommendations);
+    return res.data.recommendations;
   } catch (error: any) {
     console.error("API Response Error:", error);
     throw new Error("Failed to analyze feelings.");
