@@ -27,7 +27,7 @@ const Result: React.FC = () => {
   const explanation: string = state?.explanation || "";
   const feels: string = state?.feels || "";
 
-  const quotesData: Quotes[] = quotes;
+  const quotesData: Quotes[] = quotes as Quotes[];
 
   const handleSearch = (explanation: string, feels: string) => {
     const explanationTags = explanation
