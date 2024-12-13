@@ -136,7 +136,9 @@ const Sebastify: React.FC = () => {
       //   },
       // ];
 
-      navigate("/Result", { state: { songs: songResults } });
+      navigate("/Result", {
+        state: { songs: songResults, explanation, feels },
+      });
     } catch (error: any) {
       setErrorMessage("Failed to analyze feelings. Please try again later.");
     }
