@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../css/navbar.css";
 import { Link } from "react-router-dom";
 import { getSession } from "../utils/getSession";
+import toast, { Toaster } from "react-hot-toast";
 
 function Navbar() {
   const [isLogged, setIsLogged] = useState(false);
@@ -10,7 +11,7 @@ function Navbar() {
     try {
       const session = async () => {
         const user = await getSession();
-        if (user){
+        if (user) {
           setIsLogged(true);
         } else {
           setIsLogged(false);
@@ -23,6 +24,7 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
+    toast.success("You have logged out");
     localStorage.removeItem("token");
     setIsLogged(false);
   };

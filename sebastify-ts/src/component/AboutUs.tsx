@@ -4,6 +4,7 @@ import image1 from "../assets/music1.jpg";
 import image2 from "../assets/music2.jpg";
 import image3 from "../assets/music3.jpg";
 import image4 from "../assets/music4.jpg";
+import aboutUs from "../json/aboutUs.json";
 
 const AboutUs: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
@@ -83,12 +84,7 @@ const AboutUs: React.FC = () => {
     padding: "1rem",
   };
 
-  const messages = [
-    "A scripting language is sometimes referred to as a very high-level programming language if it operates at a high level of abstraction, or as a control language.",
-    "SQL is a fourth-generation language, meaning it is a scripting language that does not require compiling to run. Like most fourth-generation languages, SQL requires an interpreter that translates rather than compiles code.",
-    "Ease of use. Although Python has a straightforward syntax, SQL is more beginner-friendly, has fewer concepts, and is easier to learn.",
-    "This is a placeholder message for Container 4. Customize this message as needed.",
-  ];
+  const { titles, messages } = aboutUs;
   const images = [image1, image2, image3, image4];
 
   return (
@@ -108,9 +104,7 @@ const AboutUs: React.FC = () => {
               <div style={imageStyle(image, expandedCard === index)} />
               <div style={overlayStyle(expandedCard === index)} />
               <div style={textStyle}>
-                {expandedCard === index
-                  ? messages[index]
-                  : `Container ${index + 1}`}
+                {expandedCard === index ? messages[index] : titles[index]}
               </div>
             </div>
           ))}
