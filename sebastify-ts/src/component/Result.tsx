@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Result.css";
 import Navbar from "./Navbar";
 import { useLocation } from "react-router-dom";
@@ -29,7 +29,11 @@ const Result: React.FC = () => {
 
   const quotesData: Quotes[] = quotes as Quotes[];
 
-  const handleSearch = (explanation: string, feels: string) => {
+  const [songLimit, setSongLimit] = useState(3);
+
+  const [randomQuote, setRandomQuote] = useState<Quotes | null>(null);
+
+  useEffect(() => {
     const explanationTags = explanation
       .split(" ")
       .map((word) => word.trim().toLowerCase());
@@ -44,20 +48,71 @@ const Result: React.FC = () => {
 
       return explanationMatch || feelsMatch;
     });
-    return matchedQuotes;
+
+    if (matchedQuotes.length > 0) {
+      setRandomQuote(
+        matchedQuotes[Math.floor(Math.random() * matchedQuotes.length)]
+      );
+    }
+  }, [explanation, feels, quotesData]);
+
+  const handleSeeMore = () => {
+    setSongLimit((prevLimit) => prevLimit + 3);
   };
 
-  const matchedQuotes = handleSearch(explanation, feels);
-  const randomQuote =
-    matchedQuotes.length > 0
-      ? matchedQuotes[Math.floor(Math.random() * matchedQuotes.length)]
-      : null;
+  const getBackgroundColor = (feels: string) => {
+    const randomInt = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    switch (feels.toLowerCase()) {
+      case "happy":
+        // return `rgb(${randomInt(200, 255)}, ${randomInt(200, 255)}, ${randomInt(
+        //   100,
+        //   150
+        // )})`;
+        return `linear-gradient(180deg, rgb(${randomInt(200, 255)}, ${randomInt(
+          200,
+          255
+        )}, ${randomInt(100, 150)}), rgba(255, 255, 200, 0))`;
+      case "sad":
+        // return `rgb(${randomInt(100, 150)}, ${randomInt(150, 200)}, ${randomInt(
+        //   200,
+        //   255
+        // )})`;
+        return `linear-gradient(180deg, rgb(${randomInt(100, 150)}, ${randomInt(
+          150,
+          200
+        )}, ${randomInt(200, 255)}), rgba(200, 220, 255, 0))`;
+      case "angry":
+        // return `rgb(${randomInt(200, 255)}, ${randomInt(50, 100)}, ${randomInt(
+        //   50,
+        //   100
+        // )})`;
+        return `linear-gradient(180deg, rgb(${randomInt(200, 255)}, ${randomInt(
+          50,
+          100
+        )}, ${randomInt(50, 100)}), rgba(255, 200, 200, 0))`;
+      default:
+        // return `rgb(${randomInt(200, 255)}, ${randomInt(200, 255)}, ${randomInt(
+        //   200,
+        //   255
+        // )})`;
+        return `linear-gradient(135deg, rgb(${randomInt(200, 255)}, ${randomInt(
+          200,
+          255
+        )}, ${randomInt(200, 255)}), rgba(240, 240, 240, 0.5))`;
+    }
+  };
 
   return (
     <div className="result-page">
       <Navbar />
-
-      <div className="quote-section">
+      <div
+        className="quote-section"
+        style={{
+          background: getBackgroundColor(feels),
+        }}
+      >
         {randomQuote ? (
           <>
             <h2>{randomQuote.Quote}</h2>
@@ -72,7 +127,7 @@ const Result: React.FC = () => {
       </div>
 
       <div className="songs-list">
-        {songs.map((song) => (
+        {songs.slice(0, songLimit).map((song) => (
           <div key={song.spotify_id} className="song-item">
             <div className="song-title">
               <h3>{song.name}</h3>
@@ -93,7 +148,11 @@ const Result: React.FC = () => {
         ))}
       </div>
 
-      <button className="see-more">See More</button>
+      {songLimit < songs.length && (
+        <button className="see-more" onClick={handleSeeMore}>
+          See More
+        </button>
+      )}
     </div>
   );
 };
