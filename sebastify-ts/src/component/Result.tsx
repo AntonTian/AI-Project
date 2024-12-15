@@ -74,7 +74,9 @@ const Result: React.FC = () => {
       <div className="songs-list">
         {songs.map((song) => (
           <div key={song.spotify_id} className="song-item">
-            <h3>{song.name}</h3>
+            <div className="song-title">
+              <h3>{song.name}</h3>
+            </div>
             <p>Song by {song.artist}</p>
             <button
               className="play-button"
