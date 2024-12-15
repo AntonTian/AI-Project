@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/Register.css";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -7,13 +8,19 @@ import axios from "axios";
 
 const RegisterPage: React.FC = () => {
   const BackendUrl = process.env.REACT_APP_BACKEND_URL;
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toast.loading("Registering...");
     const username = e.currentTarget.username.value;
     const email = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
+
+    if (password.length < 8) {
+      toast.dismiss();
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
 
     try {
       const response = await axios.post(`${BackendUrl}/api/auth/register`, {
@@ -23,6 +30,7 @@ const RegisterPage: React.FC = () => {
       });
       toast.dismiss();
       toast.success(response.data.message);
+      navigate("/");
     } catch (error) {
       toast.dismiss();
       if (axios.isAxiosError(error) && error.response) {
@@ -72,4 +80,3 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
-

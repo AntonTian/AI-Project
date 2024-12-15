@@ -1,12 +1,13 @@
 import React from "react";
 import "../css/Login.css";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const Login: React.FC = () => {
   const BackendUrl = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,6 +22,8 @@ const Login: React.FC = () => {
       });
       toast.dismiss();
       toast.success(response.data.message);
+      navigate("/");
+
       localStorage.setItem("token", response.data.token);
     } catch {
       toast.dismiss();
