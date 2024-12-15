@@ -1,43 +1,27 @@
 import { useState, useEffect } from "react";
 import "../css/navbar.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { getSession } from "../utils/getSession";
 
 function Navbar() {
   const [isLogged, setIsLogged] = useState(false);
-  const BackendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    const getSession = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setIsLogged(false);
-        return;
-      }
-
-      try {
-        await axios.get(`${BackendUrl}/api/auth/session`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setIsLogged(true); // Only set true if session is valid
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error("Error:", error.response || error.message); // Log detailed error
-        } else {
-          console.error("Error:", error);
-        }
-        setIsLogged(false);
-      }
-    };
-    getSession();
-  }, [BackendUrl]);
+    try {
+      const session = async () => {
+        await getSession();
+        setIsLogged(true);
+      };
+      session();
+    } catch {
+      setIsLogged(false);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLogged(false);
-  }
+  };
 
   return (
     <nav>
@@ -48,7 +32,9 @@ function Navbar() {
         {isLogged ? (
           <>
             <Link to="/">History</Link>
-            <Link to="#" onClick={handleLogout}>Logout</Link>
+            <Link to="#" onClick={handleLogout}>
+              Logout
+            </Link>
           </>
         ) : (
           <>
