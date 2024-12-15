@@ -9,8 +9,12 @@ function Navbar() {
   useEffect(() => {
     try {
       const session = async () => {
-        await getSession();
-        setIsLogged(true);
+        const user = await getSession();
+        if (user){
+          setIsLogged(true);
+        } else {
+          setIsLogged(false);
+        }
       };
       session();
     } catch {
