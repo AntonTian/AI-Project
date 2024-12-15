@@ -16,12 +16,11 @@ function Navbar() {
       }
 
       try {
-        const response = await axios.get(`${BackendUrl}/api/auth/session`, {
+        await axios.get(`${BackendUrl}/api/auth/session`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data);
         setIsLogged(true); // Only set true if session is valid
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -35,6 +34,11 @@ function Navbar() {
     getSession();
   }, [BackendUrl]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLogged(false);
+  }
+
   return (
     <nav>
       <div className="logo">SEBASTIFY</div>
@@ -42,7 +46,10 @@ function Navbar() {
         <Link to="/">Home</Link>
         <Link to="/AboutUs">About Us</Link>
         {isLogged ? (
-          <Link to="/">History</Link>
+          <>
+            <Link to="/">History</Link>
+            <Link to="#" onClick={handleLogout}>Logout</Link>
+          </>
         ) : (
           <>
             <Link to="/Login">Login</Link>
