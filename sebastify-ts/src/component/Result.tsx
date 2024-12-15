@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../css/Result.css";
 import Navbar from "./Navbar";
 import { useLocation } from "react-router-dom";
-import quotes from "./json/quotes.json";
+import quotes from "../json/quotes.json";
 
 interface Quotes {
   Quote: string;
