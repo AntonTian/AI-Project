@@ -21,7 +21,8 @@ const Login: React.FC = () => {
       });
       toast.dismiss();
       toast.success(response.data.message);
-      
+      console.log(response.data.token);
+      localStorage.setItem("token", response.data.token);
     } catch {
       toast.dismiss();
       toast.error("Invalid credentials");
