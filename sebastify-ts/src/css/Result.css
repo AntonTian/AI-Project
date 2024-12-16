@@ -28,37 +28,41 @@ header nav a {
 .quote-section {
   text-align: center;
   padding: 30px;
-  background: linear-gradient(to bottom, #1e3c72, #2a5298);
+
   color: white;
 }
 
-.songs-section {
-  display: flex;
+.songs-list {
+  display: grid;
+  grid-template-columns: auto auto auto;
   justify-content: center;
   gap: 20px;
   padding: 20px;
 }
 
-.song-card {
+.song-item {
   background-color: #262748;
   padding: 10px;
   border-radius: 10px;
   text-align: center;
   max-width: 200px;
+  max-height: 120px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
-.song-card img {
-  width: 100%;
-  border-radius: 10px;
+.song-title {
+  overflow-y: auto;
+  max-height: 40px;
+  scrollbar-width: none;
 }
 
-.song-card h3 {
+.song-item h3 {
   font-size: 18px;
   margin: 10px 0;
 }
 
-.song-card button {
+.song-item button {
   background-color: #3e50b4;
   color: white;
   border: none;
@@ -70,7 +74,7 @@ header nav a {
 .see-more {
   display: block;
   margin: 20px auto;
-  background-color: #f55c47;
+  background-color: #3e50b4;
   color: white;
   border: none;
   padding: 10px 20px;

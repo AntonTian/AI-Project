@@ -1,26 +1,54 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure you're using React Router
+import { useNavigate } from "react-router-dom";
 import "../css/Sebastify.css";
 import Navbar from "./Navbar";
+import { analyzeFeelings } from "./api";
+import axios from "axios";
 
 const Sebastify: React.FC = () => {
-  const [age, setAge] = useState(37);
-  const [gender, setGender] = useState("Anonymous");
+  const [age, setAge] = useState(25);
+  const [gender, setGender] = useState("Male");
   const [feelings, setFeelings] = useState({
     happy: 0,
     sad: 0,
     angry: 0,
   });
-  const [newEmotion, setNewEmotion] = useState("");
+  const [feels, setFeels] = useState<string>("");
   const [genre, setGenre] = useState<string[]>([]);
-  const [language, setLanguage] = useState("Indonesia");
+  const [language, setLanguage] = useState("English");
   const [artist, setArtist] = useState("");
   const [year, setYear] = useState("");
   const [explanation, setExplanation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSliderChange = (key: string, value: number) => {
-    setFeelings({ ...feelings, [key]: value });
+    const newFeelings = { ...feelings, [key]: value };
+    const total = newFeelings.happy + newFeelings.sad + newFeelings.angry;
+    if (total > 100) {
+      const excess = total - 100;
+      if (
+        newFeelings.happy >= newFeelings.sad &&
+        newFeelings.happy >= newFeelings.angry
+      ) {
+        newFeelings.happy -= excess;
+      } else if (
+        newFeelings.sad >= newFeelings.happy &&
+        newFeelings.sad >= newFeelings.angry
+      ) {
+        newFeelings.sad -= excess;
+      } else {
+        newFeelings.angry -= excess;
+      }
+
+      newFeelings.happy = Math.max(0, newFeelings.happy);
+      newFeelings.sad = Math.max(0, newFeelings.sad);
+      newFeelings.angry = Math.max(0, newFeelings.angry);
+    }
+    setFeelings(newFeelings);
+
+    const newFeels = determineFeel();
+    setFeels(newFeels);
   };
 
   const handleGenreChange = (selectedGenre: string) => {
@@ -31,39 +59,89 @@ const Sebastify: React.FC = () => {
     );
   };
 
-  const handleAddEmotion = () => {
-    if (newEmotion.trim() && !(newEmotion in feelings)) {
-      setFeelings({ ...feelings, [newEmotion]: 0 });
-      setNewEmotion("");
-    }
+  const getButtonClass = (buttonGender: string) => {
+    return gender === buttonGender ? "active" : "";
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const determineFeel = () => {
+    const { happy, sad, angry } = feelings;
+    if (happy > sad && happy > angry) {
+      return "happy";
+    } else if (sad > happy && sad > angry) {
+      return "sad";
+    } else if (angry > happy && angry > sad) {
+      return "angry";
+    }
+    return "neutral";
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
+    if (age <= 0) {
+      setErrorMessage("Age must be greater than 0.");
+      return;
+    }
 
-    // Simulate generating song results based on formData
-    const songResults = [
-      {
-        title: "Kokoronashi",
-        artist: "Gumi",
-        year: 2015,
-        image: "https://example.com/kokoronashi.jpg",
-      },
-      {
-        title: "Pretender",
-        artist: "Official Hige Dandism",
-        year: 2019,
-        image: "https://example.com/pretender.jpg",
-      },
-      {
-        title: "Shinunoga E-Wa",
-        artist: "Fujii Kaze",
-        year: 2020,
-        image: "https://example.com/shinunoga-e-wa.jpg",
-      },
-    ];
+    if (!gender.trim()) {
+      setErrorMessage("Please select your gender.");
+      return;
+    }
 
-    navigate("/Result", { state: { songs: songResults } });
+    const totalFeelings = feelings.happy + feelings.sad + feelings.angry;
+    if (totalFeelings !== 100) {
+      setErrorMessage("Feelings must add up to 100%.");
+      return;
+    }
+
+    if (!language.trim()) {
+      setErrorMessage("Please select a language.");
+      return;
+    }
+
+    try {
+      const feels = determineFeel();
+
+      const songResults = await analyzeFeelings({
+        age,
+        gender,
+        feelings,
+        genre,
+        language,
+        artist,
+        year,
+        explanation,
+        feels,
+      });
+
+      //just dummy
+      // const songResults = [
+      //   {
+      //     title: "Kokoronashi",
+      //     artist: "Gumi",
+      //     year: 2015,
+      //     image: "https://example.com/kokoronashi.jpg",
+      //   },
+      //   {
+      //     title: "Pretender",
+      //     artist: "Official Hige Dandism",
+      //     year: 2019,
+      //     image: "https://example.com/pretender.jpg",
+      //   },
+      //   {
+      //     title: "Shinunoga E-Wa",
+      //     artist: "Fujii Kaze",
+      //     year: 2020,
+      //     image: "https://example.com/shinunoga-e-wa.jpg",
+      //   },
+      // ];
+
+      navigate("/Result", {
+        state: { songs: songResults, explanation, feels },
+      });
+    } catch (error: any) {
+      setErrorMessage("Failed to analyze feelings. Please try again later.");
+    }
   };
 
   return (
@@ -89,13 +167,28 @@ const Sebastify: React.FC = () => {
 
         <label>Your Gender?*</label>
         <div className="gender-input">
-          <button type="button" onClick={() => setGender("Female")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Female")}
+            className={getButtonClass("Female")}
+          >
             Female
           </button>
-          <button type="button" onClick={() => setGender("Anonymous")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Anonymous")}
+            className={getButtonClass("Anonymous")}
+          >
             Anonymous
           </button>
-          <button type="button" onClick={() => setGender("Male")}>
+          <button
+            type="button"
+            id="genderButton"
+            onClick={() => setGender("Male")}
+            className={getButtonClass("Male")}
+          >
             Male
           </button>
         </div>
@@ -122,21 +215,32 @@ const Sebastify: React.FC = () => {
         <label>What is your Fav Genre?</label>
         <div className="genre-checkbox">
           {[
-            "Pop",
-            "Rock",
-            "Country",
-            "Jazz",
-            "Blue",
-            "Hip-Hop",
-            "RnB",
-            "Classical",
-            "Folk",
-            "Indie",
-            "EDM",
-            "Latin",
-            "Metal",
-            "Reggae",
-            "Lo-Fi",
+            // "Pop",
+            // "Rock",
+            // "Country",
+            // "Jazz",
+            // "Blue",
+            // "Hip-Hop",
+            // "RnB",
+            // "Classical",
+            // "Folk",
+            // "Indie",
+            // "EDM",
+            // "Latin",
+            // "Metal",
+            // "Reggae",
+            // "Lo-Fi",
+            "pop rap",
+            "pop",
+            "post-teen pop",
+            "trap music",
+            "dance pop",
+            "rock",
+            "rap",
+            "tropical house",
+            "neo mellow",
+            "southern hip-hop",
+            "edm",
           ].map((g) => (
             <div key={g}>
               <input
