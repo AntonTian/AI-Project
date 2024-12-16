@@ -279,7 +279,7 @@ const Sebastify: React.FC = () => {
       // ];
 
       navigate("/Result", {
-        state: { songs: songResults, explanation, feels },
+        state: { songs: songResults, explanation, feels, feelings },
       });
     } catch (error: any) {
       setErrorMessage("Failed to analyze feelings. Please try again later.");
@@ -303,7 +303,11 @@ const Sebastify: React.FC = () => {
             &lt;
           </button>
           <span>{age}</span>
-          <button id="ageButton" type="button" onClick={() => setAge((prev) => prev + 1)}>
+          <button
+            id="ageButton"
+            type="button"
+            onClick={() => setAge((prev) => prev + 1)}
+          >
             &gt;
           </button>
         </div>

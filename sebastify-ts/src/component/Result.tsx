@@ -20,12 +20,21 @@ interface Song {
   spotify_id: string;
 }
 
+interface LocationState {
+  songs: Song[];
+  explanation: string;
+  feels: string;
+  feelings: {
+    happy: number;
+    sad: number;
+    angry: number;
+  };
+}
+
 const Result: React.FC = () => {
   const location = useLocation();
-  const { state } = location;
-  const songs: Song[] = state?.songs || [];
-  const explanation: string = state?.explanation || "";
-  const feels: string = state?.feels || "";
+  const { songs, explanation, feels, feelings } =
+    location.state as LocationState;
 
   const quotesData: Quotes[] = quotes as Quotes[];
 
@@ -60,48 +69,38 @@ const Result: React.FC = () => {
     setSongLimit((prevLimit) => prevLimit + 3);
   };
 
-  const getBackgroundColor = (feels: string) => {
-    const randomInt = (min: number, max: number) =>
-      Math.floor(Math.random() * (max - min + 1)) + min;
+  const getBackgroundColor = (feelings: {
+    happy: number;
+    sad: number;
+    angry: number;
+  }) => {
+    const { happy, sad, angry } = feelings;
 
-    switch (feels.toLowerCase()) {
-      case "happy":
-        // return `rgb(${randomInt(200, 255)}, ${randomInt(200, 255)}, ${randomInt(
-        //   100,
-        //   150
-        // )})`;
-        return `linear-gradient(180deg, rgb(${randomInt(200, 255)}, ${randomInt(
-          200,
-          255
-        )}, ${randomInt(100, 150)}), rgba(255, 255, 200, 0))`;
-      case "sad":
-        // return `rgb(${randomInt(100, 150)}, ${randomInt(150, 200)}, ${randomInt(
-        //   200,
-        //   255
-        // )})`;
-        return `linear-gradient(180deg, rgb(${randomInt(100, 150)}, ${randomInt(
-          150,
-          200
-        )}, ${randomInt(200, 255)}), rgba(200, 220, 255, 0))`;
-      case "angry":
-        // return `rgb(${randomInt(200, 255)}, ${randomInt(50, 100)}, ${randomInt(
-        //   50,
-        //   100
-        // )})`;
-        return `linear-gradient(180deg, rgb(${randomInt(200, 255)}, ${randomInt(
-          50,
-          100
-        )}, ${randomInt(50, 100)}), rgba(255, 200, 200, 0))`;
-      default:
-        // return `rgb(${randomInt(200, 255)}, ${randomInt(200, 255)}, ${randomInt(
-        //   200,
-        //   255
-        // )})`;
-        return `linear-gradient(135deg, rgb(${randomInt(200, 255)}, ${randomInt(
-          200,
-          255
-        )}, ${randomInt(200, 255)}), rgba(240, 240, 240, 0.5))`;
-    }
+    // Hitung total dan persentase
+    const total = happy + sad + angry;
+    const happyPct = happy / total || 0;
+    const sadPct = sad / total || 0;
+    const angryPct = angry / total || 0;
+
+    // Definisi warna dasar (RGB)
+    const happyColor = { r: 255, g: 223, b: 128 }; // Warna cerah (kuning/oranye)
+    const sadColor = { r: 128, g: 192, b: 255 }; // Warna sejuk (biru)
+    const angryColor = { r: 255, g: 80, b: 80 }; // Warna hangat (merah)
+
+    // Interpolasi warna
+    const blendedColor = {
+      r: Math.round(
+        happyPct * happyColor.r + sadPct * sadColor.r + angryPct * angryColor.r
+      ),
+      g: Math.round(
+        happyPct * happyColor.g + sadPct * sadColor.g + angryPct * angryColor.g
+      ),
+      b: Math.round(
+        happyPct * happyColor.b + sadPct * sadColor.b + angryPct * angryColor.b
+      ),
+    };
+
+    return `linear-gradient(180deg, rgb(${blendedColor.r}, ${blendedColor.g}, ${blendedColor.b}), rgba(255, 255, 255, 0))`;
   };
 
   return (
@@ -110,7 +109,7 @@ const Result: React.FC = () => {
       <div
         className="quote-section"
         style={{
-          background: getBackgroundColor(feels),
+          background: getBackgroundColor(feelings),
         }}
       >
         {randomQuote ? (
