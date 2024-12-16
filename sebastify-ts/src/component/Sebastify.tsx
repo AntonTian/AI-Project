@@ -1,9 +1,91 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Sebastify.css";
 import Navbar from "./Navbar";
 import { analyzeFeelings } from "./api";
 import axios from "axios";
+
+type EmotionToGenre = {
+  happy: string[];
+  sad: string[];
+  angry: string[];
+  nostalgic: string[];
+  frustrated: string[];
+  restless: string[];
+  neutral: string[];
+};
+
+const emotionToGenre: EmotionToGenre = {
+  happy: [
+    "pop",
+    "pop_rap",
+    "post_teen_pop",
+    "trap_music",
+    "dance_pop",
+    "jazz",
+    "classic",
+    "latin",
+    "reggae",
+    "lofi",
+    "jpop",
+    "gamelan",
+    "indonesian pop",
+    "kpop",
+  ],
+  sad: [
+    "neo_mellow",
+    "edm",
+    "country",
+    "blue",
+    "rnb",
+    "folk",
+    "indie",
+    "jdance",
+    "indonesian_indie",
+    "krock",
+    "indonesian_pop",
+  ],
+  angry: [
+    "rock",
+    "rap",
+    "tropical_house",
+    "hip hop",
+    "metal",
+    "jrock",
+    "krock",
+    "kpop",
+    "jpop",
+    "indonesian_indie",
+  ],
+  nostalgic: [
+    "neo mellow",
+    "folk",
+    "indie",
+    "blue",
+    "lofi",
+    "classic",
+    "indonesian_pop",
+  ],
+  frustrated: [
+    "metal",
+    "jrock",
+    "krock",
+    "rock",
+    "rap",
+    "metal",
+    "indonesian_indie",
+  ],
+  restless: [
+    "trap_music",
+    "dance_pop",
+    "rock",
+    "rap",
+    "tropical_house",
+    "kpop",
+    "jpop",
+  ],
+  neutral: ["pop"],
+};
 
 const genresData: { [key: string]: string[] } = {
   jazz: ["english", "instrumental"],
@@ -58,6 +140,10 @@ const Sebastify: React.FC = () => {
     genresData[genre]?.includes(language)
   );
 
+  const getGenresBasedOnFeelings = (feeling: keyof EmotionToGenre) => {
+    return emotionToGenre[feeling] || [];
+  };
+
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.target.value);
     setSelectedGenres([]);
@@ -93,9 +179,6 @@ const Sebastify: React.FC = () => {
       newFeelings.angry = Math.max(0, newFeelings.angry);
     }
     setFeelings(newFeelings);
-
-    const newFeels = determineFeel();
-    setFeels(newFeels);
   };
 
   const getButtonClass = (buttonGender: string) => {
@@ -104,6 +187,11 @@ const Sebastify: React.FC = () => {
 
   const determineFeel = () => {
     const { happy, sad, angry } = feelings;
+
+    const moodFromGenres = selectedGenres.some((genre) =>
+      emotionToGenre.happy.includes(genre)
+    );
+
     if (happy > sad && happy > angry) {
       return "happy";
     } else if (sad > happy && sad > angry) {
@@ -116,11 +204,19 @@ const Sebastify: React.FC = () => {
       } else if (happy === angry) {
         return "restless";
       } else if (sad === angry) {
-        return "frustated";
+        return "frustrated";
       }
     }
     return "neutral";
   };
+
+  useEffect(() => {
+    const newFeels = determineFeel();
+    setFeels(newFeels);
+    console.log(newFeels);
+    const updatedGenres = getGenresBasedOnFeelings(newFeels);
+    setSelectedGenres(updatedGenres);
+  }, [feelings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
