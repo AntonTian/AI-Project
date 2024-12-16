@@ -10,7 +10,6 @@ export const analyzeFeelings = async ({
   genre,
   language,
   artist,
-  year,
   explanation,
   feels,
 }: {
@@ -20,7 +19,6 @@ export const analyzeFeelings = async ({
   genre: string[];
   language: string;
   artist: string;
-  year: string;
   explanation: string;
   feels: string;
 }) => {
@@ -38,9 +36,6 @@ export const analyzeFeelings = async ({
     }
     if (artist.trim()) {
       payload["artist"] = artist;
-    }
-    if (year.trim()) {
-      payload["year"] = year;
     }
 
     console.log(payload);
