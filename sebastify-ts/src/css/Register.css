@@ -83,5 +83,9 @@ body {
 
 .register-form a {
   color: white;
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+.register-form a:hover {
+    color: #DC03B7;
 }
