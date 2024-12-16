@@ -31,7 +31,9 @@ function Navbar() {
 
   return (
     <nav>
-      <div className="logo">SEBASTIFY</div>
+      <div className="logo">
+        <Link to='/' className=''>SEBASTIFY</Link>
+      </div>
       <div className="nav-items">
         <Link to="/">Home</Link>
         <Link to="/AboutUs">About Us</Link>
