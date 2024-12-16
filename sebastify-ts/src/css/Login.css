@@ -87,3 +87,7 @@ body {
   color: white;
   text-decoration: none;
 }
+
+.login-form a:hover {
+    color: #DC03B7;
+}

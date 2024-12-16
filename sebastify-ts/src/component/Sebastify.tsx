@@ -154,13 +154,14 @@ const Sebastify: React.FC = () => {
         <label>Your Age?*</label>
         <div className="age-input">
           <button
+            id="ageButton"
             type="button"
             onClick={() => setAge((prev) => Math.max(prev - 1, 0))}
           >
             &lt;
           </button>
           <span>{age}</span>
-          <button type="button" onClick={() => setAge((prev) => prev + 1)}>
+          <button id="ageButton" type="button" onClick={() => setAge((prev) => prev + 1)}>
             &gt;
           </button>
         </div>

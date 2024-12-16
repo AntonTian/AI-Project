@@ -36,7 +36,8 @@
   height: 60px;
   width: 300px;
   background-color: #02009c;
-  border: transparent;
+  /* border: transparent; */
+  border-color: #0f0b25;
   border-radius: 50px;
   color: #fff;
   font-size: 20px;
@@ -47,4 +48,5 @@
 .hero-container button:hover {
   background-color: #0400ff;
   box-shadow: 10px 10px;
+  cursor: pointer;
 }

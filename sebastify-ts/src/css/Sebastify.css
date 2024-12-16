@@ -139,6 +139,10 @@ button[id="genderButton"]:hover {
   background-color: #4845fd;
 }
 
+button[id="ageButton"]:hover {
+  background-color: #4845fd;
+}
+
 button[type="submit"] {
   width: 100%;
   padding: 10px;
