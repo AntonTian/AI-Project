@@ -5,6 +5,39 @@ import Navbar from "./Navbar";
 import { analyzeFeelings } from "./api";
 import axios from "axios";
 
+const genresData: { [key: string]: string[] } = {
+  jazz: ["english", "instrumental"],
+  rnb: ["english", "instrumental"],
+  reggae: ["english", "spanish"],
+  latin: ["spanish", "english"],
+  rock: ["english", "spanish"],
+  rap: ["english"],
+  tropical_house: ["english"],
+  hip_hop: ["english"],
+  metal: ["english"],
+  neo_mellow: ["english"],
+  edm: ["english"],
+  country: ["english"],
+  blue: ["english"],
+  folk: ["english"],
+  indie: ["english"],
+  pop: ["english", "spanish", "instrumental"],
+  pop_rap: ["english"],
+  post_teen_pop: ["english"],
+  trap_music: ["english"],
+  dance_pop: ["english"],
+  classic: ["english"],
+  lofi: ["english", "instrumental"],
+  jpop: ["japanese"],
+  gamelan: ["indonesian"],
+  indonesian_pop: ["indonesian"],
+  indonesian_indie: ["indonesian"],
+  jrock: ["japanese"],
+  jdance: ["japanese"],
+  kpop: ["korean"],
+  krock: ["korean"],
+};
+
 const Sebastify: React.FC = () => {
   const [age, setAge] = useState(25);
   const [gender, setGender] = useState("Male");
@@ -14,13 +47,27 @@ const Sebastify: React.FC = () => {
     angry: 0,
   });
   const [feels, setFeels] = useState<string>("");
-  const [genre, setGenre] = useState<string[]>([]);
-  const [language, setLanguage] = useState("English");
+  const [language, setLanguage] = useState("english");
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [artist, setArtist] = useState("");
-  const [year, setYear] = useState("");
   const [explanation, setExplanation] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const filteredGenres = Object.keys(genresData).filter((genre) =>
+    genresData[genre]?.includes(language)
+  );
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(e.target.value);
+    setSelectedGenres([]);
+  };
+
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
+    );
+  };
 
   const handleSliderChange = (key: string, value: number) => {
     const newFeelings = { ...feelings, [key]: value };
@@ -51,14 +98,6 @@ const Sebastify: React.FC = () => {
     setFeels(newFeels);
   };
 
-  const handleGenreChange = (selectedGenre: string) => {
-    setGenre((prev) =>
-      prev.includes(selectedGenre)
-        ? prev.filter((g) => g !== selectedGenre)
-        : [...prev, selectedGenre]
-    );
-  };
-
   const getButtonClass = (buttonGender: string) => {
     return gender === buttonGender ? "active" : "";
   };
@@ -71,6 +110,14 @@ const Sebastify: React.FC = () => {
       return "sad";
     } else if (angry > happy && angry > sad) {
       return "angry";
+    } else {
+      if (happy === sad) {
+        return "nostalgic";
+      } else if (happy === angry) {
+        return "restless";
+      } else if (sad === angry) {
+        return "frustated";
+      }
     }
     return "neutral";
   };
@@ -106,10 +153,9 @@ const Sebastify: React.FC = () => {
         age,
         gender,
         feelings,
-        genre,
+        genre: selectedGenres,
         language,
         artist,
-        year,
         explanation,
         feels,
       });
@@ -212,56 +258,29 @@ const Sebastify: React.FC = () => {
           ))}
         </div>
 
+        <label>What language song do you want?*</label>
+        <select value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="spanish">Spanish</option>
+          <option value="instrumental">Instrumental</option>
+          <option value="japanese">Japanese</option>
+          <option value="indonesian">Indonesian</option>
+          <option value="korean">Korean</option>
+        </select>
+
         <label>What is your Fav Genre?</label>
         <div className="genre-checkbox">
-          {[
-            // "Pop",
-            // "Rock",
-            // "Country",
-            // "Jazz",
-            // "Blue",
-            // "Hip-Hop",
-            // "RnB",
-            // "Classical",
-            // "Folk",
-            // "Indie",
-            // "EDM",
-            // "Latin",
-            // "Metal",
-            // "Reggae",
-            // "Lo-Fi",
-            "pop rap",
-            "pop",
-            "post-teen pop",
-            "trap music",
-            "dance pop",
-            "rock",
-            "rap",
-            "tropical house",
-            "neo mellow",
-            "southern hip-hop",
-            "edm",
-          ].map((g) => (
-            <div key={g}>
+          {filteredGenres.map((genre) => (
+            <div key={genre}>
               <input
                 type="checkbox"
-                checked={genre.includes(g)}
-                onChange={() => handleGenreChange(g)}
+                checked={selectedGenres.includes(genre)}
+                onChange={() => handleGenreChange(genre)}
               />
-              <label>{g}</label>
+              <label>{genre}</label>
             </div>
           ))}
         </div>
-
-        <label>What language song do you want?*</label>
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-          <option value="Indonesia">Indonesia</option>
-          <option value="English">English</option>
-          <option value="Chinese">Chinese</option>
-          <option value="Korean">Korean</option>
-          <option value="Japanese">Japanese</option>
-          <option value="Spanish">Spanish</option>
-        </select>
 
         <div className="additional-inputs">
           <label>Artist:</label>
@@ -269,13 +288,6 @@ const Sebastify: React.FC = () => {
             type="text"
             value={artist}
             onChange={(e) => setArtist(e.target.value)}
-          />
-
-          <label>Year:</label>
-          <input
-            type="text"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
           />
         </div>
 
