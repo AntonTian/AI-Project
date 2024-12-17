@@ -88,36 +88,36 @@ const emotionToGenre: EmotionToGenre = {
 };
 
 const genresData: { [key: string]: string[] } = {
-  jazz: ["english", "instrumental"],
-  rnb: ["english", "instrumental"],
-  reggae: ["english", "spanish"],
-  latin: ["spanish", "english"],
-  rock: ["english", "spanish"],
-  rap: ["english"],
-  tropical_house: ["english"],
-  hip_hop: ["english"],
-  metal: ["english"],
-  neo_mellow: ["english"],
-  edm: ["english"],
-  country: ["english"],
-  blue: ["english"],
-  folk: ["english"],
-  indie: ["english"],
-  pop: ["english", "spanish", "instrumental"],
-  pop_rap: ["english"],
-  post_teen_pop: ["english"],
-  trap_music: ["english"],
-  dance_pop: ["english"],
-  classic: ["english"],
-  lofi: ["english", "instrumental"],
-  jpop: ["japanese"],
-  gamelan: ["indonesian"],
-  indonesian_pop: ["indonesian"],
-  indonesian_indie: ["indonesian"],
-  jrock: ["japanese"],
-  jdance: ["japanese"],
-  kpop: ["korean"],
-  krock: ["korean"],
+  jazz: ["english", "instrumental", "none"],
+  rnb: ["english", "instrumental", "none"],
+  reggae: ["english", "spanish", "none"],
+  latin: ["spanish", "english", "none"],
+  rock: ["english", "spanish", "none"],
+  rap: ["english", "none"],
+  tropical_house: ["english", "none"],
+  hip_hop: ["english", "none"],
+  metal: ["english", "none"],
+  neo_mellow: ["english", "none"],
+  edm: ["english", "none"],
+  country: ["english", "none"],
+  blue: ["english", "none"],
+  folk: ["english", "none"],
+  indie: ["english", "none"],
+  pop: ["english", "spanish", "instrumental", "none"],
+  pop_rap: ["english", "none"],
+  post_teen_pop: ["english", "none"],
+  trap_music: ["english", "none"],
+  dance_pop: ["english", "none"],
+  classic: ["english", "none"],
+  lofi: ["english", "instrumental", "none"],
+  jpop: ["japanese", "none"],
+  gamelan: ["indonesian", "none"],
+  indonesian_pop: ["indonesian", "none"],
+  indonesian_indie: ["indonesian", "none"],
+  jrock: ["japanese", "none"],
+  jdance: ["japanese", "none"],
+  kpop: ["korean", "none"],
+  krock: ["korean", "none"],
 };
 
 const Sebastify: React.FC = () => {
@@ -129,7 +129,7 @@ const Sebastify: React.FC = () => {
     angry: 0,
   });
   const [feels, setFeels] = useState<string>("");
-  const [language, setLanguage] = useState("english");
+  const [language, setLanguage] = useState("none");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [artist, setArtist] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -361,6 +361,7 @@ const Sebastify: React.FC = () => {
 
         <label>What language song do you want?*</label>
         <select value={language} onChange={handleLanguageChange}>
+          <option value="none">All</option>
           <option value="english">English</option>
           <option value="spanish">Spanish</option>
           <option value="instrumental">Instrumental</option>
