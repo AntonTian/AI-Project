@@ -121,7 +121,7 @@ const genresData: { [key: string]: string[] } = {
 };
 
 const Sebastify: React.FC = () => {
-  const [age, setAge] = useState(25);
+  const [age, setAge] = useState(13);
   const [gender, setGender] = useState("Male");
   const [feelings, setFeelings] = useState({
     happy: 0,
@@ -129,7 +129,7 @@ const Sebastify: React.FC = () => {
     angry: 0,
   });
   const [feels, setFeels] = useState<string>("");
-  const [language, setLanguage] = useState("none");
+  const [language, setLanguage] = useState("all");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [artist, setArtist] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -293,12 +293,12 @@ const Sebastify: React.FC = () => {
         <h1>Let’s Search Your Mood Song!</h1>
         <p className="mandatory">* = mandatory</p>
 
-        <label>Your Age?*</label>
+        <label>Your Age?* (13-50)</label>
         <div className="age-input">
           <button
             id="ageButton"
             type="button"
-            onClick={() => setAge((prev) => Math.max(prev - 1, 0))}
+            onClick={() => setAge((prev) => Math.max(prev - 1, 13))}
           >
             &lt;
           </button>
@@ -306,7 +306,7 @@ const Sebastify: React.FC = () => {
           <button
             id="ageButton"
             type="button"
-            onClick={() => setAge((prev) => prev + 1)}
+            onClick={() => setAge((prev) => Math.min(prev + 1, 50))}
           >
             &gt;
           </button>
