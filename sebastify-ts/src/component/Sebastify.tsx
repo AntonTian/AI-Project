@@ -88,40 +88,40 @@ const emotionToGenre: EmotionToGenre = {
 };
 
 const genresData: { [key: string]: string[] } = {
-  jazz: ["english", "instrumental", "none"],
-  rnb: ["english", "instrumental", "none"],
-  reggae: ["english", "spanish", "none"],
-  latin: ["spanish", "english", "none"],
-  rock: ["english", "spanish", "none"],
-  rap: ["english", "none"],
-  tropical_house: ["english", "none"],
-  hip_hop: ["english", "none"],
-  metal: ["english", "none"],
-  neo_mellow: ["english", "none"],
-  edm: ["english", "none"],
-  country: ["english", "none"],
-  blue: ["english", "none"],
-  folk: ["english", "none"],
-  indie: ["english", "none"],
-  pop: ["english", "spanish", "instrumental", "none"],
-  pop_rap: ["english", "none"],
-  post_teen_pop: ["english", "none"],
-  trap_music: ["english", "none"],
-  dance_pop: ["english", "none"],
-  classic: ["english", "none"],
-  lofi: ["english", "instrumental", "none"],
-  jpop: ["japanese", "none"],
-  gamelan: ["indonesian", "none"],
-  indonesian_pop: ["indonesian", "none"],
-  indonesian_indie: ["indonesian", "none"],
-  jrock: ["japanese", "none"],
-  jdance: ["japanese", "none"],
-  kpop: ["korean", "none"],
-  krock: ["korean", "none"],
+  jazz: ["english", "instrumental", "all"],
+  rnb: ["english", "instrumental", "all"],
+  reggae: ["english", "spanish", "all"],
+  latin: ["spanish", "english", "all"],
+  rock: ["english", "spanish", "all"],
+  rap: ["english", "all"],
+  tropical_house: ["english", "all"],
+  hip_hop: ["english", "all"],
+  metal: ["english", "all"],
+  neo_mellow: ["english", "all"],
+  edm: ["english", "all"],
+  country: ["english", "all"],
+  blue: ["english", "all"],
+  folk: ["english", "all"],
+  indie: ["english", "all"],
+  pop: ["english", "spanish", "instrumental", "all"],
+  pop_rap: ["english", "all"],
+  post_teen_pop: ["english", "all"],
+  trap_music: ["english", "all"],
+  dance_pop: ["english", "all"],
+  classic: ["english", "all"],
+  lofi: ["english", "instrumental", "all"],
+  jpop: ["japanese", "all"],
+  gamelan: ["indonesian", "all"],
+  indonesian_pop: ["indonesian", "all"],
+  indonesian_indie: ["indonesian", "all"],
+  jrock: ["japanese", "all"],
+  jdance: ["japanese", "all"],
+  kpop: ["korean", "all"],
+  krock: ["korean", "all"],
 };
 
 const Sebastify: React.FC = () => {
-  const [age, setAge] = useState(25);
+  const [age, setAge] = useState(13);
   const [gender, setGender] = useState("Male");
   const [feelings, setFeelings] = useState({
     happy: 0,
@@ -129,7 +129,7 @@ const Sebastify: React.FC = () => {
     angry: 0,
   });
   const [feels, setFeels] = useState<string>("");
-  const [language, setLanguage] = useState("none");
+  const [language, setLanguage] = useState("all");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [artist, setArtist] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -293,12 +293,12 @@ const Sebastify: React.FC = () => {
         <h1>Let’s Search Your Mood Song!</h1>
         <p className="mandatory">* = mandatory</p>
 
-        <label>Your Age?*</label>
+        <label>Your Age?* (13-50)</label>
         <div className="age-input">
           <button
             id="ageButton"
             type="button"
-            onClick={() => setAge((prev) => Math.max(prev - 1, 0))}
+            onClick={() => setAge((prev) => Math.max(prev - 1, 13))}
           >
             &lt;
           </button>
@@ -306,7 +306,7 @@ const Sebastify: React.FC = () => {
           <button
             id="ageButton"
             type="button"
-            onClick={() => setAge((prev) => prev + 1)}
+            onClick={() => setAge((prev) => Math.min(prev + 1, 50))}
           >
             &gt;
           </button>
@@ -361,7 +361,7 @@ const Sebastify: React.FC = () => {
 
         <label>What language song do you want?*</label>
         <select value={language} onChange={handleLanguageChange}>
-          <option value="none">All</option>
+          <option value="all">All</option>
           <option value="english">English</option>
           <option value="spanish">Spanish</option>
           <option value="instrumental">Instrumental</option>
